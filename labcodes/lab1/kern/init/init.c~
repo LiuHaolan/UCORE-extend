@@ -27,6 +27,7 @@ kern_init(void) {
 
     grade_backtrace();
 
+// haolan add comments here for debugging
 /*
     pmm_init();                 // init physical memory management
 
