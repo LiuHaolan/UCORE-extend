@@ -305,5 +305,31 @@ print_stackframe(void) {
       *           NOTICE: the calling funciton's return addr eip  = ss:[ebp+4]
       *                   the calling funciton's ebp = ss:[ebp]
       */
+	int i=0;
+	uint32_t ebp_value = read_ebp();
+	uint32_t eip_value = read_eip();
+	// backup the eax
+//	asm volatile ("pushl %%ebp" : );
+	for (i = 0; ebp_value != 0 && i < STACKFRAME_DEPTH; i ++){
+		
+
+		cprintf("ebp:%08x", ebp_value);	
+		cprintf(" eip:%08x", eip_value);	
+		
+		cprintf(" args:");
+		int j=0;		
+		for(j=0;j<4;j++){
+			uint32_t* argu = (uint32_t*)ebp_value + 2*j;
+			cprintf("%08x ", *argu);
+		}
+
+		print_debuginfo(eip_value-1);
+		//iteratively
+		// backup a register like eax and then use the reg to read the memory, and trace again.
+		
+	//	asm volatile("movl %0, %%ebp" : "=r" (ebp_value));
+		eip_value = ((uint32_t *)ebp_value)[1];
+        	ebp_value = ((uint32_t *)ebp_value)[0];	
+	}
 }
 
